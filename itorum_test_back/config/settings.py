@@ -3,11 +3,16 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = 'dh=wgg(^7v8-hza^ajzpf+a#pc!xtwzz006txojn41=w8y5na6'
+if 'SECRET_KEY' not in os.environ:
+    from dotenv import load_dotenv
 
-DEBUG = True
+    load_dotenv(os.path.join(BASE_DIR, 'env_itorum_test/.env'))
 
-ALLOWED_HOSTS = ['*']
+SECRET_KEY = os.environ.get('SECRET_KEY', 'dh=wgg(^7v8-hza^ajzpf0641=w8y5na6')
+
+DEBUG = int(os.environ.get('DEBUG', default=1))
+
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -57,8 +62,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB', 'db'),
+        'USER': os.environ.get('POSTGRES_USER', 'user'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
 
@@ -79,7 +88,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -95,13 +104,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = f'^/{PROJECT_NAME}/api/.*$'
 
-PAGE_SIZE = 15
+PAGE_SIZE = 10
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
@@ -109,3 +118,5 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'api.api_order.pagination.CustomPagination',
     'PAGE_SIZE': PAGE_SIZE
 }
+
+AUTH_USER_MODEL = 'api_user.User'
