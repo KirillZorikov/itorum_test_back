@@ -98,6 +98,8 @@ USE_TZ = True
 
 PROJECT_NAME = 'itorum_test'
 
+APPEND_SLASH = False
+
 STATIC_URL = f'/{PROJECT_NAME}/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 

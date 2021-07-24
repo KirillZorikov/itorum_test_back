@@ -1,11 +1,10 @@
-from rest_framework.authtoken import views
 from django.urls import include, path
 
-from .views import register
+from .views import register, CustomAuthToken
 
 auth_urls = [
-    path('register/', register, name='register'),
-    path('login/', views.obtain_auth_token, name='login'),
+    path('register', register, name='register'),
+    path('login', CustomAuthToken.as_view(), name='login'),
 ]
 
 urlpatterns = [
