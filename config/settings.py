@@ -5,7 +5,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if 'SECRET_KEY' not in os.environ:
     from dotenv import load_dotenv
 
-    load_dotenv(os.path.join(BASE_DIR, 'env_itorum_test/.env'))
+    load_dotenv(os.path.join(BASE_DIR, 'env_itorum_test/.env.prod'))
+    load_dotenv(os.path.join(BASE_DIR, 'env_itorum_test/.env.db'))
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dh=wgg(^7v8-hza^ajzpf0641=w8y5na6')
 
@@ -61,12 +62,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'db'),
-        'USER': os.environ.get('POSTGRES_USER', 'user'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
-        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+        'ENGINE': os.environ.get('DB_ENGINE'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
