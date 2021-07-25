@@ -23,7 +23,6 @@ class OrderViewSet(mixins.CreateModelMixin,
                    viewsets.GenericViewSet):
     serializer_class_default = serializers.OrderSerializer
     serializer_classes = {
-        'export': serializers.ExportAccessSerializer,
         'open_list': serializers.WeekNumberSerializer,
         'delete_list_orders': serializers.DeleteOrdersSerializer
     }
@@ -34,8 +33,8 @@ class OrderViewSet(mixins.CreateModelMixin,
             methods=('get',),
             permission_classes=(IsAuthenticatedAndHasAccess,))
     def export(self, request):
-        serializer = self.serializer_class_default(self.get_queryset(),
-                                                   many=True)
+        serializer = self.get_serializer(self.get_queryset(),
+                                         many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False,
