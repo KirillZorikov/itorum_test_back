@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from . import models
 from . import utils
 from . import serializers
+from .permissions import IsAuthenticatedAndHasAccess
 
 
 class CustomerViewSet(mixins.ListModelMixin,
@@ -23,18 +24,16 @@ class OrderViewSet(mixins.CreateModelMixin,
     serializer_class_default = serializers.OrderSerializer
     serializer_classes = {
         'export': serializers.ExportAccessSerializer,
-        'open_list': serializers.WeekNumberSerializer
+        'open_list': serializers.WeekNumberSerializer,
+        'delete_list_orders': serializers.DeleteOrdersSerializer
     }
     queryset = models.Order.objects.all()
-    permission_classes = (permissions.AllowAny,)
     http_method_names = ('get', 'post', 'delete')
 
     @action(detail=False,
-            methods=('post',),
-            permission_classes=(permissions.AllowAny,))
+            methods=('get',),
+            permission_classes=(IsAuthenticatedAndHasAccess,))
     def export(self, request):
-        access_serializer = self.get_serializer(data=request.data)
-        access_serializer.is_valid(raise_exception=True)
         serializer = self.serializer_class_default(self.get_queryset(),
                                                    many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -49,6 +48,16 @@ class OrderViewSet(mixins.CreateModelMixin,
             serializer.validated_data.get('week_number')
         )
         return Response(orders, status=status.HTTP_200_OK)
+
+    @action(detail=False,
+            methods=('delete',))
+    def delete_list_orders(self, request):
+        print(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        list_ids = serializer.validated_data.get('list_ids')
+        models.Order.objects.filter(id__in=list_ids).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_serializer_class(self):
         if self.action in self.serializer_classes:

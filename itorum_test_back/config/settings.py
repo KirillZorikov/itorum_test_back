@@ -1,6 +1,5 @@
 import os
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 if 'SECRET_KEY' not in os.environ:
@@ -106,7 +105,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = f'^/{PROJECT_NAME}/api/.*$'
 
-PAGE_SIZE = 10
+PAGE_SIZE = 20
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',

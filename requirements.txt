@@ -14,8 +14,6 @@ pluggy==0.13.1
 py==1.10.0
 PyJWT==2.1.0
 pyparsing==2.4.7
-pytest==5.4.1
-pytest-django==3.9.0
 python-dotenv==0.17.1
 pytils==0.3
 pytz==2021.1

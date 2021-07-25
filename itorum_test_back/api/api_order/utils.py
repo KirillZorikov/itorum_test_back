@@ -8,7 +8,9 @@ from django.db.models.functions import TruncDate
 from .models import Order
 
 
-def get_orders_by_week(week_number):
+def get_orders_by_week(week_number=None):
+    if not week_number:
+        week_number = datetime.now().strftime("%Y-W%V")
     data_from = make_aware(datetime.strptime(week_number + '-1', "%Y-W%W-%w"))
     data_to = data_from + timedelta(7)
     return Order.objects.filter(
