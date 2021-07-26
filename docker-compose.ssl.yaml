@@ -1,0 +1,46 @@
+version: '3.7'
+
+services:
+  itorum_test_prod:
+    build: ./
+    image: kzorikov/itorum_test_back:v1
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8003
+    restart: always
+    depends_on:
+      - db_itorum_test
+    volumes:
+      - static_itorum_test:/home/itorum/itorum_test/static/
+    env_file:
+      - env_itorum_test/.env.prod
+  db_itorum_test:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_itorum_test:/var/lib/postgresql/data/
+    env_file:
+      - env_itorum_test/.env.db
+  nginx:
+    image: nginx:1.19.0-alpine
+    restart: always
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    volumes:
+      - ./nginx/app_ssl.conf:/etc/nginx/conf.d/app_ssl.conf
+      - static_itorum_test:/home/itorum/itorum_test/static/
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    ports:
+      - 80:80
+    depends_on:
+      - itorum_test_prod
+  certbot:
+    image: certbot/certbot
+    restart: always
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    depends_on:
+      - nginx
+
+volumes:
+  postgres_itorum_test:
+  static_itorum_test:
