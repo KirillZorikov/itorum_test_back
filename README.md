@@ -38,7 +38,7 @@ docker-compose exec itorum_test_prod python manage.py collectstatic
 #### Также есть возможность запустить сайт на HTTPS. Для этого, до запуска контейнеров, необходимо:
 - Скачать **docker-compose.ssl.yaml** и **init-letsencrypt.sh**
 - Заполнить [init-letsencrypt.sh](https://github.com/KirillZorikov/itorum_test_back/blob/master/init-letsencrypt.sh) и [app_ssl.conf](https://github.com/KirillZorikov/itorum_test_back/blob/master/nginx/app_ssl.conf)
-данными для своего имени хоста.
+данными своего хост имени.
 - Сгенерировать HTTPS сертификаты:
 ```
 chmod +x init-letsencrypt.sh
