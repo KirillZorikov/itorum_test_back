@@ -44,7 +44,7 @@ docker-compose exec itorum_test_prod python manage.py collectstatic
 chmod +x init-letsencrypt.sh
 sudo ./init-letsencrypt.sh
 ```
-- Заменить в инструкции все команды, с: 
+- Заменить в инструкции все команды с: 
 ```
 docker-compose
 ```
