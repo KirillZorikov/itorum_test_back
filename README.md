@@ -5,8 +5,8 @@ Django бэкенд для тествого задания компании Ит
 
 ### Ссылки проекта:
 
-* Project site: https://kz-projects.tk/itorum_test/
-* Vue 3 frontend: https://github.com/KirillZorikov/itorum_test_front
+* Сайт: https://kz-projects.tk/itorum_test/
+* Vue 3 фронтенд: https://github.com/KirillZorikov/itorum_test_front
 * Api: https://kz-api.tk/itorum_test/api/v1/
 * Admin panel: https://kz-api.tk/itorum_test/admin/
 * Docker образ: [backend](https://hub.docker.com/repository/docker/kzorikov/itorum_test_back)
